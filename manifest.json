@@ -1,0 +1,16 @@
+{
+  "name": "Strike",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "Hated that tweet? Strike it! When an account gets three strikes, I'll let you know so you can unfollow it.",
+  "browser_action": {
+    "default_icon": "strike.png",
+    "default_popup": "strike.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://twitter.com/*"],
+      "js": ["strike.js"]
+    }
+  ]
+}
