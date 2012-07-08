@@ -7,6 +7,14 @@
     "default_icon": "strike.png",
     "default_popup": "strike.html"
   },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": [
+    "tabs",
+    "webRequest",
+    "https://twitter.com/*"
+  ],
   "content_scripts": [
     {
       "matches": ["https://twitter.com/*"],

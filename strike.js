@@ -44,40 +44,42 @@ Element.prototype.getAccount = function() {
 function injectStrikes() {
     document.querySelectorAll('ul.tweet-actions') // returns NodeList
             .forEach(function(ul) {
-        var tweetId = ul.getTweetId()
-        var account = ul.getAccount()
+        if(ul.children[4] === undefined) { // Append Strike if missing
+            var tweetId = ul.getTweetId()
+            var account = ul.getAccount()
 
-        var icon = document.createElement('span')
-        icon.className = 'sm-strike'
-        icon.textContent = '✘'
+            var icon = document.createElement('span')
+            icon.className = 'sm-strike'
+            icon.textContent = '✘'
 
-        var unstrike = document.createElement('span')
-        unstrike.className = 'unstrike'
-        unstrike.title = 'Undo strike'
-        unstrike.textContent = 'Striked'
+            var unstrike = document.createElement('span')
+            unstrike.className = 'unstrike'
+            unstrike.title = 'Undo strike'
+            unstrike.textContent = 'Striked'
 
-        var strike = document.createElement('span')
-        strike.className = 'strike'
-        strike.title = strike.textContent = 'Strike'
+            var strike = document.createElement('span')
+            strike.className = 'strike'
+            strike.title = strike.textContent = 'Strike'
 
-        var b = document.createElement('b')
-        b.appendChild(unstrike)
-        b.appendChild(strike)
+            var b = document.createElement('b')
+            b.appendChild(unstrike)
+            b.appendChild(strike)
 
-        var a = document.createElement('a')
-        a.className = 'with-icn js-toggle-strike'
-        a.onclick = function() {
-            striked = strikeTweet(tweetId, account)
-            toggleStrike(striked)
+            var a = document.createElement('a')
+            a.className = 'with-icn js-toggle-strike'
+            a.onclick = function() {
+                striked = strikeTweet(tweetId, account)
+                toggleStrike(striked)
+            }
+            a.appendChild(icon)
+            a.appendChild(b)
+
+            var li = document.createElement('li')
+            li.className = 'action-strike-container'
+            li.appendChild(a)
+
+            ul.appendChild(li)
         }
-        a.appendChild(icon)
-        a.appendChild(b)
-
-        var li = document.createElement('li')
-        li.className = 'action-strike-container'
-        li.appendChild(a)
-
-        ul.appendChild(li)
 
         function toggleStrike(toRed) {
             if(toRed) {
@@ -107,3 +109,5 @@ function injectStrikes() {
 }
 
 injectStrikes()
+
+chrome.extension.onMessage.addListener(function() { injectStrikes() })
