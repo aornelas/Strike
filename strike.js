@@ -1,12 +1,14 @@
 var STRIKES_TO_UNFOLLOW = 3
 
 function strikeTweet(id, account) {
+    var striked = false;
     var strikedAccounts = JSON.parse(localStorage.strikes || '{}')
     var strikedTweets = strikedAccounts[account] || []
 
     var tweetIndex = strikedTweets.indexOf(id)
     if(tweetIndex === -1) {
         strikedTweets.push(id)
+        striked = true
     } else {
         strikedTweets.splice(tweetIndex, 1)
     }
@@ -17,6 +19,7 @@ function strikeTweet(id, account) {
     console.log(localStorage.strikes)
 
     runUmpire(account, strikedAccounts[account].length)
+    return striked
 }
 
 function runUmpire(account, strikeCount) {
@@ -30,26 +33,20 @@ function runUmpire(account, strikeCount) {
 // Extend NodeList with Array's forEach
 NodeList.prototype.forEach = Array.prototype.slice.call(this).forEach
 
-// Extend Element('ul.tweet-actions') with Tweet utility methods
-Element.prototype.isRetweet = function() {
-    return this.parentNode.children[0].children.length > 0
-}
+// Extend Element('ul.tweet-actions') with data getters
 Element.prototype.getTweetId = function() {
     return this.parentNode.parentNode.parentNode.parentNode.getAttribute('data-item-id')
 }
 Element.prototype.getAccount = function() {
-    account = this.parentNode.parentNode.parentNode.getAttribute('data-screen-name')
-    if(this.isRetweet()) {
-        //TODO: Return the account of who retweeted
-        alert("Strike doesn't support Retweets yet. Sorry!")
-        throw "Striking Retweets is not yet supported"
-    }
-    return account
+    return this.parentNode.parentNode.parentNode.getAttribute('data-screen-name')
 }
 
 function injectStrikes() {
     document.querySelectorAll('ul.tweet-actions') // returns NodeList
             .forEach(function(ul) {
+        var tweetId = ul.getTweetId()
+        var account = ul.getAccount()
+
         var icon = document.createElement('span')
         icon.className = 'sm-strike'
         icon.textContent = '✘'
@@ -70,11 +67,20 @@ function injectStrikes() {
         var a = document.createElement('a')
         a.className = 'with-icn js-toggle-strike'
         a.onclick = function() {
-            var tweetId = ul.getTweetId()
-            var account = ul.getAccount()
-            strikeTweet(tweetId, account)
+            striked = strikeTweet(tweetId, account)
+            toggleStrike(striked)
+        }
+        a.appendChild(icon)
+        a.appendChild(b)
 
-            if(a.style.color != 'red') {
+        var li = document.createElement('li')
+        li.className = 'action-strike-container'
+        li.appendChild(a)
+
+        ul.appendChild(li)
+
+        function toggleStrike(toRed) {
+            if(toRed) {
                 strike.style.display = 'none'
                 unstrike.style.display = 'inline'
                 icon.style.color = 'red'
@@ -86,14 +92,17 @@ function injectStrikes() {
                 icon.style.color = a.style.color = '#2FC2EF'
             }
         }
-        a.appendChild(icon)
-        a.appendChild(b)
 
-        var li = document.createElement('li')
-        li.className = 'action-strike-container'
-        li.appendChild(a)
+        function loadStrike() {
+            var strikedAccounts = JSON.parse(localStorage.strikes || '{}')
+            var strikedTweets = strikedAccounts[account] || []
 
-        ul.appendChild(li)
+            var tweetIndex = strikedTweets.indexOf(tweetId)
+            if(tweetIndex != -1) {
+                toggleStrike(true)
+            }
+        }
+        loadStrike()
     })
 }
 
