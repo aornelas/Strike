@@ -5,20 +5,31 @@ NodeList.prototype.forEach = Array.prototype.slice.call(this).forEach
 function injectStrikes() {
     document.querySelectorAll('ul.tweet-actions') // returns NodeList
             .forEach(function(ul) {
-        var i = document.createElement('i')
-        i.class = 'sm-strike'
+        var icon = document.createElement('span')
+        icon.className = 'sm-strike'
+        icon.textContent = '✘'
+
+        var unstrike = document.createElement('span')
+        unstrike.className = 'unstrike'
+        unstrike.title = 'Undo strike'
+        unstrike.textContent = 'Striked'
+
+        var strike = document.createElement('span')
+        strike.className = 'strike'
+        strike.title = strike.textContent = 'Strike'
 
         var b = document.createElement('b')
-        b.textContent = '✘ Strike'
+        b.appendChild(unstrike)
+        b.appendChild(strike)
 
         var a = document.createElement('a')
-        a.class = 'with-icn js-toggle-strike'
+        a.className = 'with-icn js-toggle-strike'
         a.href = '#'
-        a.appendChild(i)
+        a.appendChild(icon)
         a.appendChild(b)
 
         var li = document.createElement('li')
-        li.class = 'action-strike'
+        li.className = 'action-strike-container'
         li.appendChild(a)
 
         ul.appendChild(li)

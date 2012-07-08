@@ -1,0 +1,12 @@
+.unstrike {
+	display: none;
+}
+
+.sm-strike {
+	margin-right: 4px;
+	font-size: 13px;
+}
+
+.strike-icon {
+	text-decoration: none;
+}
