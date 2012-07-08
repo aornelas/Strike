@@ -4,7 +4,12 @@ function strikeTweet(id, account) {
     var strikedAccounts = JSON.parse(localStorage.strikes || '{}')
     var strikedTweets = strikedAccounts[account] || []
 
-    if(strikedTweets.indexOf(id) === -1) { strikedTweets.push(id) }
+    var tweetIndex = strikedTweets.indexOf(id)
+    if(tweetIndex === -1) {
+        strikedTweets.push(id)
+    } else {
+        strikedTweets.splice(tweetIndex, 1)
+    }
     strikedAccounts[account] = strikedTweets
     localStorage.strikes = JSON.stringify(strikedAccounts)
 
@@ -68,6 +73,18 @@ function injectStrikes() {
             var tweetId = ul.getTweetId()
             var account = ul.getAccount()
             strikeTweet(tweetId, account)
+
+            if(a.style.color != 'red') {
+                strike.style.display = 'none'
+                unstrike.style.display = 'inline'
+                icon.style.color = 'red'
+                a.style.color = 'red'
+            } else {
+                strike.style.display = 'inline'
+                unstrike.style.display = 'none'
+                //TODO: Programmatically get this color
+                icon.style.color = a.style.color = '#2FC2EF'
+            }
         }
         a.appendChild(icon)
         a.appendChild(b)
