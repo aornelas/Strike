@@ -1,3 +1,4 @@
+var STRIKES_TO_UNFOLLOW = 3
 
 function strikeTweet(id, account) {
     var strikedAccounts = JSON.parse(localStorage.strikes || '{}')
@@ -9,6 +10,16 @@ function strikeTweet(id, account) {
 
     console.log('Striked tweet by ' + account + ' with id: ' + id)
     console.log(localStorage.strikes)
+
+    runUmpire(account, strikedAccounts[account].length)
+}
+
+function runUmpire(account, strikeCount) {
+    if(strikeCount >= STRIKES_TO_UNFOLLOW) {
+        if(confirm(strikeCount + ' strikes!\nDo you want to unfollow ' + account + '?')) {
+            //TODO: Add account to 'Stroke Out' list and unfollow; remove strikes for account
+        }
+    }
 }
 
 // Extend NodeList with Array's forEach
