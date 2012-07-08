@@ -35,7 +35,7 @@ NodeList.prototype.forEach = Array.prototype.slice.call(this).forEach
 
 // Extend Element('ul.tweet-actions') with data getters
 Element.prototype.getTweetId = function() {
-    return this.parentNode.parentNode.parentNode.parentNode.getAttribute('data-item-id')
+    return this.parentNode.parentNode.parentNode.getAttribute('data-item-id')
 }
 Element.prototype.getAccount = function() {
     return this.parentNode.parentNode.parentNode.getAttribute('data-screen-name')
