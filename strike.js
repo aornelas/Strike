@@ -1,6 +1,14 @@
 
 function strikeTweet(id, account) {
+    var strikedAccounts = JSON.parse(localStorage.strikes || '{}')
+    var strikedTweets = strikedAccounts[account] || []
+
+    if(strikedTweets.indexOf(id) === -1) { strikedTweets.push(id) }
+    strikedAccounts[account] = strikedTweets
+    localStorage.strikes = JSON.stringify(strikedAccounts)
+
     console.log('Striked tweet by ' + account + ' with id: ' + id)
+    console.log(localStorage.strikes)
 }
 
 // Extend NodeList with Array's forEach
