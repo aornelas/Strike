@@ -1,3 +1,14 @@
+// Extend NodeList with Array's forEach
+NodeList.prototype.forEach = NodeList.prototype.forEach || Array.prototype.slice.call(this).forEach
+
+// Extend Element('ul.tweet-actions') with data getters
+Element.prototype.getTweetId = Element.prototype.getTweetId || function() {
+    return this.parentNode.parentNode.parentNode.getAttribute('data-item-id')
+}
+Element.prototype.getAccount = Element.prototype.getAccount || function() {
+    return this.parentNode.parentNode.parentNode.getAttribute('data-screen-name')
+}
+
 var STRIKES_TO_UNFOLLOW = 3
 
 function strikeTweet(id, account) {
@@ -28,17 +39,6 @@ function runUmpire(account, strikeCount) {
             //TODO: Add account to 'Stroke Out' list and unfollow; remove strikes for account
         }
     }
-}
-
-// Extend NodeList with Array's forEach
-NodeList.prototype.forEach = Array.prototype.slice.call(this).forEach
-
-// Extend Element('ul.tweet-actions') with data getters
-Element.prototype.getTweetId = function() {
-    return this.parentNode.parentNode.parentNode.getAttribute('data-item-id')
-}
-Element.prototype.getAccount = function() {
-    return this.parentNode.parentNode.parentNode.getAttribute('data-screen-name')
 }
 
 function injectStrikes() {
