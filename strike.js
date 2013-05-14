@@ -44,7 +44,7 @@ function runUmpire(account, strikeCount) {
 function injectStrikes() {
     document.querySelectorAll('ul.tweet-actions') // returns NodeList
             .forEach(function(ul) {
-        if(ul.children[4] === undefined) { // Append Strike if missing
+        if(ul.querySelectorAll('li.action-strike-container').length === 0) { // Append Strike if missing
             var tweetId = ul.getTweetId()
             var account = ul.getAccount()
 
